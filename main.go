@@ -25,7 +25,9 @@ func main() {
 	var lettersTocolor string
 	var colorCode string
 	var outputFlag string
+	var alignFlag string
 
+	flag.StringVar(&alignFlag, "align", "center", "Aligns the text center, left, right or justify")
 	flag.StringVar(&outputFlag, "output", "banner.txt", "specify the ascii-font to be printed")
 	flag.StringVar(&colorflag, "color", "reset", "color for color input")
 	flag.Parse()

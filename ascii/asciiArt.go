@@ -13,6 +13,10 @@ import (
 // lettersToColor (a string representing the letters to be colored),
 // and color (a string representing the color to be applied).
 func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode string, outputfile string) {
+	if IsFlagPassed("align") {
+		AsciiAlign(fileArr, wordsArr, lettersToColor, colorCode)
+		return
+	}
 	var count int
 	reset := "\033[0m"
 	file, err := os.Create(outputfile)
