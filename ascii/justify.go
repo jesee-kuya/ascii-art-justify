@@ -14,10 +14,13 @@ import (
 // wordsArr (a slice of strings representing the words to be printed),
 // lettersToColor (a string representing the letters to be colored),
 // and color (a string representing the color to be applied).
-func AsciiAlign(fileArr []string, wordsArr []string, lettersToColor string, colorCode string) {
+func AsciiAlign(fileArr []string, wordsArr []string, lettersToColor string, colorCode string, alignFlag string) {
+	var toPrint [10]string
+	var str string
 	cmd := exec.Command("stty", "size")
 	cmd.Stdin = os.Stdin
 	size, err := cmd.Output()
+	fmt.Println(string((size)))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -39,20 +42,33 @@ func AsciiAlign(fileArr []string, wordsArr []string, lettersToColor string, colo
 					start := (v - 32) * 9
 					switch {
 					case len(lettersToColor) == 0:
-						fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), colorCode+fileArr[int(start)+i]+reset))
+						// fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2),
+						toPrint[i] += colorCode + fileArr[int(start)+i] + reset
 					case strings.Contains(lettersToColor, string(v)):
-						fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), colorCode+fileArr[int(start)+i]+reset))
+						toPrint[i] += colorCode + fileArr[int(start)+i] + reset
 					default:
-						fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), fileArr[int(start)+i]))
+						toPrint[i] += fileArr[int(start)+i]
 					}
 				}
-				fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), "\n"))
 			}
 		} else {
 			count++
 			if count < len(wordsArr) {
-				fmt.Printf(fmt.Sprintf("%%-%ds", termWidth/2), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), "\n"))
+				fmt.Printf(fmt.Sprintf("%%-%ds", (termWidth/2)), fmt.Sprintf(fmt.Sprintf("%%%ds", termWidth/2), "\n"))
 			}
 		}
+		for _, v := range toPrint {
+			if v != "" {
+				if alignFlag == "centre" {
+					str = fmt.Sprintf("%*s", -termWidth, fmt.Sprintf("%*s", (termWidth+len(v))/2, v))
+				} else if alignFlag == "right" {
+					str = fmt.Sprintf("%*s", +(termWidth), v)
+				} else if alignFlag == "left" {
+					str = fmt.Sprintf("%v", v)
+				}
+				fmt.Println(str)
+			}
+		}
+		toPrint = [10]string{}
 	}
 }

@@ -13,8 +13,9 @@ import (
 // lettersToColor (a string representing the letters to be colored),
 // and color (a string representing the color to be applied).
 func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode string, outputfile string) {
+	alignFlag := "right"
 	if IsFlagPassed("align") {
-		AsciiAlign(fileArr, wordsArr, lettersToColor, colorCode)
+		AsciiAlign(fileArr, wordsArr, lettersToColor, colorCode, alignFlag)
 		return
 	}
 	var count int
