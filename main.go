@@ -40,6 +40,8 @@ func main() {
 			receive.AllignCentre()
 		} else if receive.Allignflag == "justify" {
 			receive.AllignJustify()
+		} else if receive.Allignflag == "right" {
+			receive.AllignRight()
 		}
 	}
 	ascii.Ascii(receive)
