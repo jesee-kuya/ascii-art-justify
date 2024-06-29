@@ -42,6 +42,9 @@ func main() {
 			receive.AllignJustify()
 		} else if receive.Allignflag == "right" {
 			receive.AllignRight()
+		} else if receive.Allignflag != "left" {
+			fmt.Printf("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard\n")
+			return
 		}
 	}
 	ascii.Ascii(receive)

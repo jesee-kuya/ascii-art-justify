@@ -91,7 +91,7 @@ func (s *Receiver) AddSpace(word string, space int) (new string) {
 	str := word
 	var count int
 	width := Getwidth()
-	for s.GetSizeOfCharacters(str) < width-1 {
+	for s.GetSizeOfCharacters(str) < width-4 {
 		str += " "
 		count++
 	}
@@ -109,6 +109,7 @@ func (s *Receiver) AddSpace(word string, space int) (new string) {
 	return
 }
 
+// AllignRight adds the necessary spaces before the string to align its ascii right on the terminal
 func (s *Receiver) AllignRight() {
 	width := Getwidth()
 	checkLen := 0
@@ -125,7 +126,7 @@ func (s *Receiver) AllignRight() {
 	}
 	workingLen := s.GetSizeOfCharacters(word)
 
-	for s.GetSizeOfCharacters(word) < (width - workingLen) {
+	for s.GetSizeOfCharacters(word)+workingLen < (width - 4) {
 		word = " " + word
 		count++
 	}
