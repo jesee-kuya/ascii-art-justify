@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Getwidth gets the width of the current terminal and return it as an int
 func Getwidth() int {
 	cmd := exec.Command("stty", "size")
 	cmd.Stdin = os.Stdin
@@ -16,6 +17,7 @@ func Getwidth() int {
 	return width
 }
 
+// GetSizeOfCharacters return the total length of the charactes on the terminal in ascii-art format as an int
 func (s *Receiver) GetSizeOfCharacters(word string) int {
 	var length int
 	for _, v := range word {
@@ -25,12 +27,14 @@ func (s *Receiver) GetSizeOfCharacters(word string) int {
 	return length
 }
 
+// SizeOfSpace returns the width of ascii-art space as an int
 func (s *Receiver) SizeOfSpace() int {
 	v := ' '
 	start := ((v - 32) * 9) + 4
 	return len(s.FileArr[start])
 }
 
+// AllignCentre adds the necessary spaces so that the text can be printed centre of the terminal
 func (s *Receiver) AllignCentre() {
 	var checkLen int
 	var word string
@@ -41,12 +45,14 @@ func (s *Receiver) AllignCentre() {
 		}
 	}
 	lenChar := s.GetSizeOfCharacters(word)
-	rem := lenChar % 2
+	if lenChar%2 != 0 {
+		lenChar--
+	}
 
 	width := Getwidth()
 	var arr []string
 	space := " "
-	for len(space)*s.SizeOfSpace() <= (width/2 - ((lenChar / 2) - rem)) {
+	for len(space)*s.SizeOfSpace() <= (width/2 - (lenChar / 2)) {
 		space += " "
 	}
 	for _, v := range s.WordsArr {
@@ -55,4 +61,49 @@ func (s *Receiver) AllignCentre() {
 		arr = append(arr, word)
 	}
 	s.WordsArr = arr
+}
+
+func (s *Receiver) AllignJustify() {
+	var arr []string
+	for _, v := range s.WordsArr {
+		spaces := CheckSpace(v)
+		if spaces != 0 {
+			v = s.AddSpace(v, spaces)
+		}
+		arr = append(arr, v)
+	}
+	s.WordsArr = arr
+}
+
+func CheckSpace(word string) (check int) {
+	for _, v := range word {
+		if v == ' ' {
+			check++
+		}
+	}
+	return
+}
+
+func (s *Receiver) AddSpace(word string, space int) (new string) {
+	var sp string
+	str := word
+	var count int
+	width := Getwidth()
+	for s.GetSizeOfCharacters(str) < width -1 {
+		str += " "
+		count++
+	}
+	spaceCount := count / space
+	for len(sp) != spaceCount {
+		sp += " "
+	}
+	//remspace := count % space
+
+	for _, v := range word {
+		if v == ' ' {
+			new += sp
+		}
+		new += string(v)
+	}
+	return
 }

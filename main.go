@@ -36,7 +36,11 @@ func main() {
 	}
 	receive.Art()
 	if ascii.IsFlagPassed("align") {
-		receive.AllignCentre()
+		if receive.Allignflag == "center" {
+			receive.AllignCentre()
+		} else if receive.Allignflag == "justify" {
+			receive.AllignJustify()
+		}
 	}
 	ascii.Ascii(receive)
 }
