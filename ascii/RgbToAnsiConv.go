@@ -15,9 +15,13 @@ func RgbToAnsiConv(colorflag string) (string, error) {
 	if strings.Contains(colorflag, "=") {
 		return "", errors.New(" Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <letters to be colored> \"something\"")
 	}
-
+	// Trim the colorflag of any strings that start with "rgb".
 	colorflag = strings.Trim(colorflag, "rgb")
+
+	// Trim the colorflag of any parentheses, brackets, and square brackets.
 	colorflag = strings.Trim(colorflag, "(){}[]")
+
+	// Trim the colorflag of any whitespace.
 	colorflag = strings.ReplaceAll(colorflag, " ", "")
 
 	arr := strings.Split(colorflag, ",")
@@ -25,13 +29,14 @@ func RgbToAnsiConv(colorflag string) (string, error) {
 		return "", errors.New("use rgb(r, g, b) format")
 	}
 
+	// Create an RGB struct.
 	rgb := RGB{}
 	for i, v := range arr {
 		num, err := strconv.Atoi(v)
 		if err != nil {
 			return "", errors.New("the rgb code is wrong. use rgb(r, g, b) format")
 		}
-
+		// Assign the integer to the corresponding field of the RGB struct.
 		if num >= 0 && num <= 255 {
 			switch i {
 			case 0:
@@ -47,6 +52,6 @@ func RgbToAnsiConv(colorflag string) (string, error) {
 			return "", errors.New("the RGB value should be between 0 and 255")
 		}
 	}
-
+	// Convert the RGB struct to an ANSI escape sequence and return it.
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", rgb.R, rgb.G, rgb.B), nil
 }

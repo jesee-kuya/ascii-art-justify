@@ -12,55 +12,52 @@ import (
 // wordsArr (a slice of strings representing the words to be printed),
 // lettersToColor (a string representing the letters to be colored),
 // and color (a string representing the color to be applied).
-func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode string, outputfile string) {
+func Ascii(s Receiver) {
 	var count int
 	reset := "\033[0m"
-	file, err := os.Create(outputfile)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	var outputBuilder strings.Builder
 
-	for _, val := range wordsArr {
+	for _, val := range s.WordsArr {
 		if val != "" {
 			for i := 1; i <= 8; i++ {
 				for _, v := range val {
 					start := (v - 32) * 9
-					switch {
-					case len(lettersToColor) == 0:
-						if IsFlagPassed("output") {
-							fmt.Fprint(file, colorCode+fileArr[int(start)+i]+reset)
-						} else {
-							fmt.Print(colorCode + fileArr[int(start)+i] + reset)
-						}
-					case strings.Contains(lettersToColor, string(v)):
-						if IsFlagPassed("output") {
-							fmt.Fprintf(file, colorCode+fileArr[int(start)+i]+reset)
-						} else {
-							fmt.Print(colorCode + fileArr[int(start)+i] + reset)
-						}
-					default:
-						if IsFlagPassed("output") {
-							fmt.Fprintf(file, fileArr[int(start)+i])
-						} else {
-							fmt.Print(fileArr[int(start)+i])
-						}
+					if len(s.LettersToColor) == 0 {
+						outputBuilder.WriteString(s.ColorCode + s.FileArr[int(start)+i] + reset)
+					} else if strings.Contains(s.LettersToColor, string(v)) {
+						outputBuilder.WriteString(s.ColorCode + s.FileArr[int(start)+i] + reset)
+					} else {
+						outputBuilder.WriteString(s.FileArr[int(start)+i])
 					}
 				}
-				if IsFlagPassed("output") {
-					fmt.Fprintln(file)
-				} else {
-					fmt.Println()
-				}
+				outputBuilder.WriteString("\n")
 			}
 		} else {
 			count++
-			if count < len(wordsArr) {
-				if IsFlagPassed("output") {
-					fmt.Fprintln(file)
-				}
-				fmt.Println()
+			if count < len(s.WordsArr) {
+				outputBuilder.WriteString("\n")
 			}
 		}
+	}
+
+	if IsFlagPassed("output") {
+		validFileName, err := IsValidName(s.Outputflag)
+		if !validFileName {
+			fmt.Println(err)
+			return
+		}
+		file, err := os.Create(s.Outputflag)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+
+		_, err = file.WriteString(outputBuilder.String())
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		fmt.Print(outputBuilder.String())
 	}
 }
