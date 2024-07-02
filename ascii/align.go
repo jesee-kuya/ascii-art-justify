@@ -34,48 +34,6 @@ func (s *Receiver) SizeOfSpace() int {
 	return len(s.FileArr[start])
 }
 
-// AllignCentre adds the necessary spaces so that the text can be printed centre of the terminal
-func (s *Receiver) AllignCentre() {
-	var checkLen int
-	var word string
-	for _, v := range s.WordsArr {
-		if len(v) > checkLen {
-			word = v
-			checkLen = len(v)
-		}
-	}
-	lenChar := s.GetSizeOfCharacters(word)
-	if lenChar%2 != 0 {
-		lenChar--
-	}
-
-	width := Getwidth()
-	var arr []string
-	space := " "
-	for len(space)*s.SizeOfSpace() <= (width/2 - (lenChar / 2)) {
-		space += " "
-	}
-	for _, v := range s.WordsArr {
-		word := v
-		word = space + word
-		arr = append(arr, word)
-	}
-	s.WordsArr = arr
-}
-
-// AllignJustify adds necessary spaces in between words to justify align the ascii-art on the terminal
-func (s *Receiver) AllignJustify() {
-	var arr []string
-	for _, v := range s.WordsArr {
-		spaces := CheckSpace(v)
-		if spaces != 0 {
-			v = s.AddSpace(v, spaces)
-		}
-		arr = append(arr, v)
-	}
-	s.WordsArr = arr
-}
-
 func CheckSpace(word string) (check int) {
 	for _, v := range word {
 		if v == ' ' {
@@ -91,51 +49,71 @@ func (s *Receiver) AddSpace(word string, space int) (new string) {
 	str := word
 	var count int
 	width := Getwidth()
-	for s.GetSizeOfCharacters(str) < width-4 {
+	for s.GetSizeOfCharacters(str) < width {
 		str += " "
 		count++
 	}
-	spaceCount := count / space
-	for len(sp) != spaceCount {
+	target := count / space
+
+	// for target%s.SizeOfSpace() != 0 {
+	// 	target--
+	// }
+
+	for len(sp) != target {
 		sp += " "
 	}
 
 	for _, v := range word {
-		if v == ' ' {
-			new += sp
+		if s.GetSizeOfCharacters(new) < width {
+			if v == ' ' {
+				new += sp
+			}
+			new += string(v)
 		}
-		new += string(v)
 	}
 	return
 }
 
+func (s *Receiver) Allign(n int) {
+	var arr []string
+	width := Getwidth()
+	for _, v := range s.WordsArr {
+		lenWord := s.GetSizeOfCharacters(v)
+		target := width/n - lenWord/n
+		space := ""
+
+		for target%s.SizeOfSpace() != 0 {
+			target--
+		}
+
+		for s.GetSizeOfCharacters(space) != target {
+			space += " "
+		}
+		v = space + v
+		arr = append(arr, v)
+	}
+	s.WordsArr = arr
+
+}
+
 // AllignRight adds the necessary spaces before the string to align its ascii right on the terminal
 func (s *Receiver) AllignRight() {
-	width := Getwidth()
-	checkLen := 0
-	word := ""
-	space := ""
+	s.Allign(1)
+}
+
+// AllignCentre adds the necessary spaces so that the text can be printed centre of the terminal
+func (s *Receiver) AllignCentre() {
+	s.Allign(2)
+}
+
+// AllignJustify adds necessary spaces in between words to justify align the ascii-art on the terminal
+func (s *Receiver) AllignJustify() {
 	var arr []string
-
 	for _, v := range s.WordsArr {
-		if len(v) > checkLen {
-			word = v
-			checkLen = len(v)
+		spaces := CheckSpace(v)
+		if spaces != 0 {
+			v = s.AddSpace(v, spaces)
 		}
-	}
-	workingLen := s.GetSizeOfCharacters(word)
-	target := width - workingLen
-
-	for target%s.SizeOfSpace() != 0 {
-		target--
-	}
-
-	for s.GetSizeOfCharacters(space) != target {
-		space += " "
-	}
-
-	for _, v := range s.WordsArr {
-		v = space + v
 		arr = append(arr, v)
 	}
 	s.WordsArr = arr
