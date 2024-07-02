@@ -114,7 +114,6 @@ func (s *Receiver) AllignRight() {
 	width := Getwidth()
 	checkLen := 0
 	word := ""
-	count := 0
 	space := ""
 	var arr []string
 
@@ -125,12 +124,13 @@ func (s *Receiver) AllignRight() {
 		}
 	}
 	workingLen := s.GetSizeOfCharacters(word)
+	target := width - workingLen
 
-	for s.GetSizeOfCharacters(word)+workingLen < (width - 4) {
-		word = " " + word
-		count++
+	for target%s.SizeOfSpace() != 0 {
+		target--
 	}
-	for len(space) != count {
+
+	for s.GetSizeOfCharacters(space) != target {
 		space += " "
 	}
 
