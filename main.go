@@ -4,14 +4,18 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"ascii/ascii"
 )
 
 func main() {
 	for _, v := range os.Args {
-		if v == "--color" || v == "-color" {
-			fmt.Println("Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <letters to be colored> \"something\"")
+		if v == "--color" || v == "--output" || v == "--align" {
+			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+			return
+		} else if strings.HasPrefix(v, "-color") || strings.HasPrefix(v, "-output") || strings.HasPrefix(v, "-align") {
+			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
 			return
 		}
 	}
