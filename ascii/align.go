@@ -49,7 +49,7 @@ func (s *Receiver) AddSpace(word string, space int) (new string) {
 	str := word
 	var count int
 	width := Getwidth()
-	for s.GetSizeOfCharacters(str) < width {
+	for s.GetSizeOfCharacters(str)+s.SizeOfSpace() < width {
 		str += " "
 		count++
 	}

@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-// Ascii prints ASCII art from a given array of characters.
-// The characters are extracted from a predefined file array.
-// The function takes in four arguments: fileArr (a slice of strings representing the file array),
-// wordsArr (a slice of strings representing the words to be printed),
-// lettersToColor (a string representing the letters to be colored),
-// and color (a string representing the color to be applied).
+// Ascii prints ASCII art from a given array of characters or writes the result to a file passed by the output.
+// The characters are extracted from a predefined file array in the receiver struct.
+// The method takes in a receiver stuct and uses the struct fields for forming our output.
+// The field wordsArr in the receiver stuct (a slice of strings representing the words to be printed),
+// The field ilettersToColor in receiver struct (a string representing the letters to be colored),
+// and colordoe filed in the reciver stuct (a string representing the color to be applied).
 func Ascii(s Receiver) {
 	var count int
 	reset := "\033[0m"
@@ -22,7 +22,7 @@ func Ascii(s Receiver) {
 			for i := 1; i <= 8; i++ {
 				for _, v := range val {
 					start := (v - 32) * 9
-					if len(s.LettersToColor) == 0 {
+					if len(s.LettersToColor) == 0 && s.ColorCode != "" {
 						outputBuilder.WriteString(s.ColorCode + s.FileArr[int(start)+i] + reset)
 					} else if strings.Contains(s.LettersToColor, string(v)) {
 						outputBuilder.WriteString(s.ColorCode + s.FileArr[int(start)+i] + reset)
@@ -39,6 +39,8 @@ func Ascii(s Receiver) {
 			}
 		}
 	}
+
+	//checks if the output flag has been passed or not.
 
 	if IsFlagPassed("output") {
 		validFileName, err := IsValidName(s.Outputflag)

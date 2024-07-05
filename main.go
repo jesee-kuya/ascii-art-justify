@@ -11,7 +11,7 @@ import (
 
 func main() {
 	for _, v := range os.Args {
-		if v == "--color" || v == "--output" || v == "--align" {
+		if v == "--color" || v == "--output" || v == "--align" || v == "--align=" || v == "--output=" || v == "--color=" {
 			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
 			return
 		} else if strings.HasPrefix(v, "-color") || strings.HasPrefix(v, "-output") || strings.HasPrefix(v, "-align") {
