@@ -78,19 +78,24 @@ func (s *Receiver) Allign(n int) {
 	var arr []string
 	width := Getwidth()
 	for _, v := range s.WordsArr {
-		lenWord := s.GetSizeOfCharacters(v)
-		target := width/n - lenWord/n
-		space := ""
+		if v == "" {
+			arr = append(arr, v)
+			continue
+		} else {
+			lenWord := s.GetSizeOfCharacters(v)
+			target := width/n - lenWord/n
+			space := ""
 
-		for target%s.SizeOfSpace() != 0 {
-			target--
-		}
+			for target%s.SizeOfSpace() != 0 {
+				target--
+			}
 
-		for s.GetSizeOfCharacters(space) != target {
-			space += " "
+			for s.GetSizeOfCharacters(space) != target {
+				space += " "
+			}
+			v = space + v
+			arr = append(arr, v)
 		}
-		v = space + v
-		arr = append(arr, v)
 	}
 	s.WordsArr = arr
 
@@ -110,11 +115,16 @@ func (s *Receiver) AllignCentre() {
 func (s *Receiver) AllignJustify() {
 	var arr []string
 	for _, v := range s.WordsArr {
-		spaces := CheckSpace(v)
-		if spaces != 0 {
-			v = s.AddSpace(v, spaces)
+		if v == "" {
+			arr = append(arr, v)
+			continue
+		} else {
+			spaces := CheckSpace(v)
+			if spaces != 0 {
+				v = s.AddSpace(v, spaces)
+			}
+			arr = append(arr, v)
 		}
-		arr = append(arr, v)
 	}
 	s.WordsArr = arr
 }
