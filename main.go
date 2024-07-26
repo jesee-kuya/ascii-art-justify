@@ -40,15 +40,11 @@ func main() {
 	}
 	receive.Art()
 	if ascii.IsFlagPassed("align") {
-		if receive.Allignflag == "center" {
-			receive.AllignCentre()
-		} else if receive.Allignflag == "justify" {
-			receive.AllignJustify()
-		} else if receive.Allignflag == "right" {
-			receive.AllignRight()
-		} else if receive.Allignflag != "left" {
+		if receive.Allignflag != "center" && receive.Allignflag != "right" && receive.Allignflag != "justify" && receive.Allignflag != "left" {
 			fmt.Printf("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard\n")
 			return
+		} else {
+			receive.Alligner()
 		}
 	}
 	ascii.Ascii(receive)

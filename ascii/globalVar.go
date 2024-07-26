@@ -38,4 +38,5 @@ type Receiver struct {
 	LettersToColor      string
 	ColorCode           string
 	IndexToStartDisplay int
+	Spaces              []int
 }
