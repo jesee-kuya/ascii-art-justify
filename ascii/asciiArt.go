@@ -36,6 +36,7 @@ func Ascii(s Receiver) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		return
 	} else {
 		fmt.Print(art)
 	}
@@ -143,6 +144,10 @@ func (s *Receiver) Justify() string {
 	var art strings.Builder
 	in := 0
 	for _, val := range s.WordsArr {
+		arr := strings.Fields(val)
+		val = strings.Join(arr, " ")
+		s.Spaces = nil
+		s.RemainingSpace(val)
 		spaces := CountSpace(val)
 		if val != "" {
 			for i := 1; i <= 8; i++ {
